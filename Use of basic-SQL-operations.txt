@@ -5,5 +5,934 @@
 -- c. Edit records
 -- d. Apply the basic unary and binary operations such as 
 -- e. Nested the statements etc. 
-  #%%%%%%%%%%%%%%% Code is here %%%%%%%%%%CREATE TABLE customers (    id int,    name char(10) NOT NULL,    city char(10),    state char(3),    email char(20) NOT NULL,    PRIMARY KEY (ID) );CREATE TABLE items (    item_no int,    description char(10) NOT NULL,    qty_p_stock int NOT NULL,    price decimal(5,2) NOT NULL CONSTRAINT price_CK CHECK (price >= 1 and price <= 500),    PRIMARY KEY (item_no) );  CREATE TABLE transactions (    c_id int,    item_id int,    item_qty int NOT NULL CONSTRAINT item_qty_CK CHECK (item_qty > 0),    trans_date date NOT NULL ,    PRIMARY KEY (c_id, item_id),    FOREIGN KEY (c_id) references customers(id),    FOREIGN KEY (item_id) references items(item_no) );%%%%%%%% Insert records on each table %%%%%%# insert attributes in the customers table:    Insert into customers  values(101, 'Sam', NULL, 'Okl', 'sam101@uark.edu');        Insert into customers values(102, 'John', 'Rogers', 'Ark',  'john102@uark.edu');        Insert into customers values(103, 'Robert', NULL, 'Ark',  'robert103@uark.edu');        Insert into customers values(104, 'Amelia', 'Dallas', 'Tex',  'amelia104@uark.edu');        Insert into customers values(105, 'Rayan', 'Farmington', 'Ark', 'rayan105@uark.edu');        Insert into customers values(106, 'Avery', 'Lincoln', NULL, 'avery106@uark.edu');        Insert into customers values(107, 'Bob', NULL, 'Ark', 'bob107@uark.edu');        Insert into customers values(108, 'Jessy', 'Rogers', 'Ark', 'jessy108@uark.edu');    Insert into customers values(109, 'Ella', 'Branson', NULL, 'ella109@uark.edu');        Insert into customers values(110, 'Harper', 'Westfork', 'Ark', 'harper110@uark.edu');        Insert into customers values(111, 'Sophia', 'Lincoln', 'Ark', 'sophia111@uark.edu');        Insert into customers values(112, 'Luna', 'Fayettevil', 'Ark', 'luna112@uark.edu');--add 15 records in items tableInsert into items values(10, 'IpadSleeve', 120,  29.99);Insert into items values(11, 'GalSleeve', 200, 24.99);Insert into items values(12, 'KindSleeve', 60, 10.99);Insert into items values(13, 'SurfSleeve', 100,  29.99);Insert into items values(14, 'Galaxy16GB', 43,  223.23);Insert into items values(15, 'Galaxy32GB', 150,  390.99);Insert into items values(16, 'Galaxy64GB', 40, 499.99);Insert into items values(17, 'Ipad16GB', 123, 399.99);Insert into items values(18, 'Ipad32GB', 99, 499.99);Insert into items values(19, 'Kindle8GB', 121, 79.99);Insert into items values(20, 'Kindle16GB', 99,  123.23);Insert into items values(21, 'Kindle32GB', 75,  159.49);Insert into items values(22, 'MSSurf16GB', 49,  399.99);Insert into items values(23, 'MSSurf32GB', 40,  449.99);Insert into items values(24, 'MSSurf64GB', 29,  499.99);#add 18 records in transactions table#Insert into transactions VALUESInsert into transactions VALUES (107, 16, 1, '21-Jul-2021');Insert into transactions VALUES (106, 12, 2, '15-Jul-2021');Insert into transactions VALUES (107, 15, 1, '25-Jul-2021');Insert into transactions VALUES(105, 15, 1, '22-Aug-2021');Insert into transactions VALUES(103, 14, 2, '11-Sep-2021');Insert into transactions VALUES(106, 15, 1, '21-Jul-2021');Insert into transactions VALUES(104, 16, 1, '02-Aug-2021');Insert into transactions VALUES(108, 18, 3, '01-Aug-2021');Insert into transactions VALUES(103, 15, 1, '15-Jul-2021');Insert into transactions VALUES(102, 17, 2, '30-Jul-2021');Insert into transactions VALUES(102, 18, 1, '12-Aug-2021');Insert into transactions VALUES(104, 19, 1, '15-Aug-2021');Insert into transactions VALUES(104, 17, 2, '15-Aug-2021');Insert into transactions VALUES(104, 20, 1, '15-Aug-2021');Insert into transactions VALUES(102, 16, 1, '12-Aug-2021');Insert into transactions VALUES (104, 12, 1, '25-Jul-2021');Insert into transactions VALUES (103, 10, 1, '25-Jul-2021');#Insert into transactions VALUES (108, 24, 1, '01-Aug-2021');#Insert into transactions VALUES (108, 14, 1, '25-Jul-2021');Insert into transactions VALUES (108, 21, 1, TO_DATE(CURRENT_DATE - 1));Insert into transactions VALUES (103, 21, 1, TO_DATE(CURRENT_DATE));##update the records#UPDATE customers#SET city = 'Fortworth'#WHERE id = 108;UPDATE transactions    SET trans_date =  '14-Nov-2021'    Where c_id = 108 and item_id = 24;UPDATE transactions    SET trans_date =  TO_DATE(CURRENT_DATE - 5)    Where c_id = 108 and item_id = 14;/* To turn in your output, on SQL prompt, type: spool   MAKE file as asgn1*/spool LAMICHHANE-HW5/*1.  Show all tables you have created.  Use the command */Select * from cat;/* 2. Show the schema of each table.  Use the command desc tablename; Replace the word "tablename" with actual name of each table.*/desc CUSTOMERS;desc ITEMS;desc TRANSACTIONS;/*To make the output of tasks 3, 4, and 5 look nicer, please set the following formats before executing those commands.  The formats should be set from sqlplus (i.e., after logging on to oracle). */column owner format a12column table_name format a12column foreign_key format a12column primary_key format a12column referring_table format a15column search_condition format a45/*3. Show all primary keys. To show the primary keys:*/select a.owner, a.table_name, column_name primary_key,a.constraint_namefrom   user_cons_columns a, user_constraints bwhere  a.constraint_name = b.constraint_name andconstraint_type = 'P';/*4. Show all foreign key(s).To show the foreign keys:*/select a.owner, a.table_name, a.column_name foreign_key,       b.table_name Referring_table, b.column_name             Primary_key      from   user_cons_columns a, user_cons_columns b,             user_constraints c      where  a.constraint_name = c.constraint_name and             c.r_constraint_name = b.constraint_name;/*5. Show other constraints (if any) on each table.To show all other constraints:*/select owner, table_name, search_condition from user_constraints where search_condition is not null;/*6 print the all records from the created table*/SELECT * FROM table_name # replace table_name by the name of the table you want to printSELECT * FROM CUSTOMERS;SELECT * FROM items;SELECT * FROM transactions;/*Then execute the commands for tasks 1 through 6 to display the results on screen.  Finally, type:                        spool offExit from sqlplus.  Upload your spool file via Blackboard.*/spool off#################### Assignment-1 ends here ################Exit from sqlplus.  Upload your spool file via Blackboard.# To drop a table/* DROP TABLE table_name;/*/*UPDATE CUSTOMERSSET state = 'AR'WHERE id = 112; */############### Some micscelleneous code #######################SELECT name, ID FROM customers where ID = C_ID FROM customers);SELECT name, ID FROM customers Where ID = ANY (SELECT C_ID, ITEM_ID From transactions Where ITEM_NO = any (SELECT max(cost) FROM test_items));#SELECT max(cost) FROM test_items;SELECT item_no From test_items Where cost = any (SELECT max(cost) FROM test_items);select C_ID from transactions where ITEM_ID =  any(SELECT item_no From test_items Where cost = any (SELECT max(cost) FROM test_items));################################## Assignment 2 ##################################spool asgn2/* Assignment 2 Question 1.    Find and print the total number of customers who are from Arkansas (i.e., state is listed as “AR”) but have no city information in the database.  SELECT COUNT(id) FROM customers WHERE state = 'AR' and city is NULL;*/SELECT COUNT(id) FROM (SELECT id from customers  WHERE state = 'AR' and city is NULL);/* Question No 2.   Print the names and IDs of customers who have purchased the most priced item(s).  Do not print duplicate records. We do not need select distinct  here since all records are distinct by id in Customers table */SELECT  name, ID FROM customers WHERE ID IN  (SELECT DISTINCT C_ID from transactions WHERE item_id IN   (SELECT item_no FROM items WHERE price IN  (SELECT max(price) FROM items)));/* Question No 3.  Print the description and qty_p_stock values of items that were never sold.*/SELECT description, qty_p_stock FROM items WHERE item_no NOT IN ( SELECT item_id FROM transactions);/* Question No 4. Sold at leat one time   Show the item number, description, and price of items that have been ever sold.  Do not print duplicate records.   We do not need select distinct  here since all items are distinct by item number in items table*/SELECT  item_no, description, price FROM items where item_no IN ( SELECT DISTINCT item_id FROM transactions);/*  Question No 5.    Print the date(s) when any item worth more than $400 was sold.  There should be no duplicate records in the output.    We need select distinct here because item_id is not a  primary key in the transaction tables*/SELECT DISTINCT trans_date FROM transactions WHERE ITEM_ID IN (SELECT  item_no FROM items WHERE price > 400 );spool off################# Assignment 3 goes below ###########"-------------------------------------" log on to oracle using the following command:              rlwrap sqlplus dbclass53@\"localhost:49161/xe\"/*Show the schema of each table.  Use the command desc tablename; Replace the word "tablename" with actual name of each table.*/desc CUSTOMERS;desc ITEMS;desc TRANSACTIONS;######CREATE TABLE student(stu_id varchar(10),stu_name varchar(20),branch varchar(20));CREATE TABLE branch_details(branch_name varchar(10),subjects INT);CREATE TABLE credit_details(branch varchar(20),max_credits INT,mp_credits_required INT);INSERT INTO student VALUES('1901401','DEVA','C.S');INSERT INTO student VALUES('1901402','HARSH','C.S');INSERT INTO student VALUES('1901403','DAVID','E.C');INSERT INTO branch_details VALUES('C.S',8);INSERT INTO branch_details VALUES('E.C',7);INSERT INTO credit_details VALUES('C.S',24, 12);INSERT INTO credit_details VALUES('E.C',21, 11);SELECT * FROM student;SELECT * FROM branch_details;SELECT * FROM credit_details;SELECT * FROM student, branch_details, credit_details;#Query to display students who have enrolled in a course and their particulars.SELECT student.stu_id, student.stu_name,student.branch, subjects, max_creditsFROM student, branch_details, credit_detailsWHERE student.branch = branch_details.branch_name ANDbranch_details.branch_name = credit_details.branch;#update the recordsUPDATE customersSET city = 'Fortworth'WHERE id = 108;select c_id, item_id, trans_date from transactions where trans_date  = any(select min(trans_date) from transactions);spool asgn3/*---------------------  ASSIGNMENT - 3   ----------------------------- Question No 1.    Find the earliest transaction made by any customer from the state of TX.  Print the customer’s name, item description, and transaction date.*/SELECT name    ,description    ,trans_dateFROM (    SELECT customers.name        ,customers.STATE        ,items.description        ,transactions.trans_date    FROM customers        ,items        ,transactions    WHERE customers.id = transactions.c_id        AND items.item_no = transactions.item_id        AND transactions.trans_date = (            SELECT min(transactions.trans_date) AS mp_TX_date            FROM customers                ,transactions            WHERE customers.id = transactions.c_id                AND customers.STATE = 'TX'            )        AND customers.STATE = 'TX'    );-- Alternatively Using Join OperationSELECT customers.name    ,items.description    ,transactions.trans_dateFROM transactionsINNER JOIN items ON items.item_no = transactions.item_idINNER JOIN customers ON customers.id = transactions.c_idWHERE customers.STATE = 'TX'    AND transactions.trans_date = (        SELECT min(transactions.trans_date)        FROM customers            ,transactions        WHERE customers.id = transactions.c_id            AND customers.STATE = 'TX'        );/*  Question No 2.    For every customer who has ever purchased an item, print the customer's name, email ID, corresponding item description, and purchase date.  If a customer has made purchases multiple times, there should be a row for each of his/her transaction. */SELECT name    ,email    ,description    ,trans_dateFROM (    SELECT customers.name        ,customers.email        ,items.description        ,transactions.trans_date    FROM customers        ,items        ,transactions    WHERE customers.id = transactions.c_id        AND items.item_no = transactions.item_id    );-- Alternatively Using JOIN OperationSELECT name    ,email    ,description    ,trans_dateFROM customersINNER JOIN transactions ON customers.id = transactions.c_idINNER JOIN items ON items.item_no = transactions.item_id;/* Question No 3.    For every item, print the item_no, its description, and the number of times the item was sold (i.e., the number of transactions having that item).*/SELECT item_no    ,description    ,count(item_id) AS num_items_soldFROM transactionsINNER JOIN items ON transactions.item_id = items.item_noGROUP BY item_no    ,description;/* Question No 4.    For every item worth more than $200, print the item_no, price, and the name(s) of customer(s) who have purchased the item.  The output must appear in descending order of price and must not have any duplicate records. */SELECT item_no    ,price    ,nameFROM customers    ,items    ,transactionsWHERE customers.id = transactions.c_id    AND items.item_no = transactions.item_id    AND items.price > 200ORDER BY price DESC;-- Alternatively Using JOIN OperationSELECT item_no    ,price    ,nameFROM customersINNER JOIN transactions ON customers.id = transactions.c_idINNER JOIN items ON items.item_no = transactions.item_id    AND items.price > 200ORDER BY price DESC;/*    Question No 5.    For every customer, find the number of times the customer has made a purchase.  The output should show the customer’s ID, name, and the purchase count. If a customer has never purchased anything, the customer’s ID and name should be there in the output; but the count value should be absent. */SELECT id    ,name    ,count(c_id) AS purchase_countFROM customersINNER JOIN transactions ON customers.id = transactions.c_idGROUP BY name    ,idUNIONSELECT id    ,name    ,c_idFROM customersLEFT JOIN transactions ON customers.id = transactions.c_idWHERE transactions.c_id IS NULL;spool off################# HOMEWORK - 4 ###############################------------------------------------------------------------#1.  Count the number of transactions made during each month in 2020.  Then print the month (spelled out completely) and the total number of transactions made during that month.  That is, print "January" and total number of transactions in January, and so on.2.  Show the names of customers who have made purchases only on Sundays.3.  For any item that was not sold yesterday, print the item_no, description, and price.4.  Find the name of the customer who has made the maximum number of purchases within the last 10 days (not counting the day the query is being run).  Print his/her name and the string  "** Star Customer" next to the name.5.  Write a view named CUST_PURCHASES to calculate the total number of times a customer has made a purchase during the last month.  The output must show the ID and name of the customer and the number of times he/she has made the purchase.  If a customer did not make a purchase last month, your output should show the ID and name of the customer, and the word “Zero” next to the name (under the column that shows the number of purchases).Create the view before you create the spool file.  The view creation command should not appear in your output file.  Rather, do the followings to show the view definition.  Type the following 'SET' command only once after you log on to oracle.     SQL> Set Long n(replace n with an integer that is more than the maximum number of characters in the view definition)Then use the following 'SELECT' command to display the view definition.  The output of this command must appear in your spool file.   SQL> Select text from user_views where view_name = '????';   Replace ???? with the view name in upper case.  Make sure to use quotes around the view name.The spool file must show the queries for tasks 1 to 4, their output, the view definition and the records in the view.###########################################################################rlwrap sqlplus dbclass53@\"localhost:49161/xe\"set pagesize 25Set Long 1000spool asgn4--##################  HOMEWORK - 4 ##############################------------------  SURYA LAMICHHANE ------------------------------/*1.  Count the number of transactions made during each month in 2020.  Then print the month (spelled out completely) and the total number of transactions made during that month.  That is, print "January" and total number of transactions in January, and so on.*/SELECT month    ,year    ,count(c_id) AS num_TransFROM (    SELECT c_id        ,EXTRACT(year FROM trans_date) year        ,TO_CHAR(trans_date, 'Month') month    FROM transactions    )WHERE year = '2020'GROUP BY month, year;/*2.  Show the names of customers who have made purchases only on Sundays.*/--customers made transations on SundaySELECT C.name    --,dt.dayFROM customers CJOIN (    SELECT c_id    --,TO_CHAR(trans_date, 'fmday') day    FROM transactions    WHERE TO_CHAR(trans_date, 'fmday') = 'sunday' Minus    SELECT c_id    --,TO_CHAR(trans_date, 'fmday') day    FROM transactions    WHERE TO_CHAR(trans_date, 'fmday') != 'sunday'    ) dt ON C.id = dt.c_id;/*3.  For any item that was not sold yesterday, print the item_no, description, and price.*/ SELECT item_no    ,description    ,priceFROM itemsWHERE item_no NOT IN (        SELECT item_id        FROM transactions        WHERE trans_date = (                SELECT TO_DATE(CURRENT_DATE - 1)                FROM dual                )        ); /*4.  Find the name of the customer who has made the maximum number of purchases within the last 10 days (not counting the day the query is being run).  Print his/her name and the string  "** Star Customer" next to the name.*/SELECT CONCAT(name, '** Star Customer') as nameFROM (SELECT name    ,count(id) as L10_DaysFROM customersJOIN (    SELECT c_id    FROM transactions    WHERE trans_date BETWEEN (                    SELECT TO_DATE(CURRENT_DATE - 10)                    FROM dual                    )            AND (                    SELECT TO_DATE(CURRENT_DATE)                    FROM dual                    )    ) ten_days ON customers.id = ten_days.c_idGROUP BY customers.nameORDER BY L10_Days DESC) WHERE rownum = 1;/*5.  Write a view named CUST_PURCHASES to calculate the total number of times a customer has made a purchase during the last month.  The output must show the ID and name of the customer and the number of times he/she has made the purchase.  If a customer did not make a purchase last month, your output should show the ID and name of the customer, and the word “Zero” next to the name (under the column that shows the number of purchases).*/-- Show the view definitionSELECT TEXTFROM user_viewsWHERE view_name = 'CUST_PURCHASES';-- Print the records from view = CUST_PURCHASESSELECT * FROM CUST_PURCHASES;spool off###################### HOMEWORK-4 ENDS HERE #######################----------------  AFTER THE FOLLOWING VIEW CTREATE CODE ---------- CREATE VIEW CUST_PURCHASESASSELECT name    ,id    ,CASE        WHEN count IS NULL            THEN 'Zero'        ELSE to_char(count)        END AS num_purchaseFROM customersLEFT JOIN (    SELECT c_id        ,count(c_id) AS count    FROM transactions    WHERE EXTRACT(month FROM trans_date) = EXTRACT(month FROM sysdate) - 1        AND to_char(trans_date, 'yyyy') = to_char(sysdate, 'yyyy')    GROUP BY c_id    ) ON id = c_id;/* Create the view before you create the spool file.  The view creation command should not appear in your output file.  Rather, do the followings to show the view definition.   Type the following 'SET' command only once after you log on to oracle.      SQL> Set Long n (replace n with an integer that is more than the maximum number of characters in the view definition) Then use the following 'SELECT' command to display the view definition.  The output of this command must appear in your spool file.    SQL> Select text from user_views where view_name = 'CUST_PURCHASES';    Replace ???? with the view name in upper case.  Make sure to use quotes around the view name. The spool file must show the queries for tasks 1 to 4, their output, the view definition and the records in the view. */########------- ASSIGNMENT 5 -----------###################You may refer to PL/SQL part of my oracle notes to complete this assignment.Write a PL/SQL procedure to perform the following tasks in order to add a record to the transactions table.1.  The procedure accepts c_id, item_id, and item_qty values from user.2.  Then it performs the following checks:    (a) The c_id must exist in customers table.    (b) The item_id must exist in items table (item_no).    (c) The qty_p_stock value for the corresponding item in items table must be equal to or greater than the item_qty value entered by the user.    If any of the above conditions fail, the procedure prints an appropriate message and quits.3.  If all of the above conditions are satisfied, the procedure determines the trans_date as the date when the procedure is being run (i.e., current date).4.  The procedure then inserts into the transactions table a record having the c_id, item_id, and item_qty values as supplied by the user in step 1, and the trans_date value as determined in step 3.  It also updates the items table to show the qty_p_stock value for the item after the purchase.  The procedure then prints a message indicating successful addition of the record and terminates.Save the procedure in a file named xxxx.sql, replacing 'xxxx' with your last name.Generate a spool file showing the procedure code (use the command 'get' followed by the procedure name on SQL prompt to show the code), output for each of the failed cases as mentioned in task 2, and  output of a successful record insertion into transactions table and modification of the items table (task 4). Name the spool file as xxxx.lst, replacing 'xxxx' with your last name.Submit the procedure file and the spool file via Blackboard.#########################################/* Write a PL/SQL procedure to perform the following tasks in order to add a record to the transactions table. 1.  The procedure accepts c_id, item_id, and item_qty values from user. */SET serveroutput on;DECLAREc_id customers.id%type;item_id items.item_no%type;item_qty transactions.item_qty%type;trans_date transactions.trans_date%type;procedure enough_qty(    cur_stock int,    sale_qty in out int,    rem_qty int    ) IS    BEGIN    rem_qty := cur_stock - sale_qty;    END;BEGIN    SELECT id        , item_no        , qty_p_stockFrom into customers, itemsintoupdate transactions;DECLARE qty_on_hand NUMBER (5);BEGIN    SELECT quantity    INTO qty_on_hand    FROM inventory    WHERE product = 'TENNIS RACKET'    FOR    UPDATE OF quantity;    IF qty_on_hand > 0 THEN -- check quantity        UPDATE inventory        SET quantity = quantity - 1        WHERE product = 'TENNIS RACKET';    INSERT INTO purchase_record    VALUES (        'Tennis racket purchased'        ,SYSDATE        );ELSE    INSERT INTO purchase_record    VALUES (        'Out of tennis rackets'        ,SYSDATE        );ENDIF ;    COMMIT;    END;####### Try a PL/SQL code  #######Declare    message varchar2(20) := 'Hello, World!';Begin    dbms_output.put_line(' HELLO ' || 12344 || ' WORLD! ');End;/#  output on setupset serveroutput on# in other way# using execute keywordcreate  or replace procedure greetingsasDeclare    message varchar2(20) := 'Hello, World!';Begin    dbms_output.put_line(message);End;/execute greetings;##########################
-CREATE TABLE acct_master (    acct_no number(5) PRIMARY KEY    ,acct_name varchar2(10)    ,balance number(10)    );# INSERTING data in acct_mstrinsert into acct_master values(1, 'aaa', 1000);insert into acct_master values(2, 'bbb', 100);insert into acct_master values(3, 'ccc', 1100);insert into acct_master values(4, 'ddd', 700);insert into acct_master values(5, 'eee', 1700);#Note that all text in green colour are comments.#Below is the required implementation:--WARNING! ERRORS ENCOUNTERED DURING SQL PARSING!-- DECLARING VARIABLESDECLARE xacct_no number (5);-- here, minimum balance is set to 1000;xmp_bal number(5) : = 1000;xbalance number(5);BEGIN    -- taking input from user    xacct_no: = & xacct_no;    -- selecting balance of that user INTO "xbalance";    SELECT balance    INTO xbalance    FROM acct_master    WHERE acct_no = xacct_no;    -- if condition true, updating balance    -- with balance = balance - 100    IF (xbalance < xmp_bal) THEN --condition check        UPDATE acct_master        SET balance = balance - 100        WHERE acct_no = xacct_no;    -- remaining amount    xbalance: = xbalance - 100;    dbms_output.put_line('Rs 100 is deducted            and current balance is ' || xbalance);        -- if condition is false        ELSE    dbms_output.put_line('Current balance is ' || xbalance);        --ENDING IFENDIF ;    -- ENDING OF BEGIN    END;/ -- FOR DISPLAYING OUTPUT IN SCREEN####### HOMEWORK - 5 /* Write a PL/SQL procedure to perform the following tasks in order to add a record to the transactions table. 1.  The procedure accepts c_id, item_id, and item_qty values from user. */#2.  "-------------------------------------" log on to oracle using the following command:              rlwrap sqlplus dbclass53@\"localhost:49161/xe\"SET serveroutput ON;CREATE OR replace PROCEDURE transactions_insert(p_c_id customers.id%type, p_item_id items.item_no%type, p_item_qty transactions.item_qty%type) IS--# insert a new transactionBEGIN    INSERT INTO transactions (        c_id        ,item_id        ,item_qty        ,trans_date        )    VALUES (        p_c_id        ,p_item_id        ,p_item_qty        ,SYSDATE        );    --# update qty in stock in items table    UPDATE items    SET qty_in_stock = qty_in_stock - p_item_qty    WHERE item_no = p_item_id;    dbms_output.put_line('record inserted successfully ...!');END;/EXEC transactions_insert(110, 12, 2);####################ACCEPT p_c_id PROMPT "Enter Customer id_info ";ACCEPT p_item_id PROMPT "Enter item id_info ";ACCEPT p_item_qty PROMPT "Enter sale item qty";BEGIN    INSERT INTO transactions VALUES (&p_c_id, &p_item_id, &p_item_qty,to_date(SYSDATE));    COMMIT;END;DELETEFROM    transactionsWHERE    trans_date = to_date(SYSDATE);
+  
+#%%%%%%%%%%%%%%% Code is here %%%%%%%%%%
+
+CREATE TABLE customers (
+    id int,
+    name char(10) NOT NULL,
+    city char(10),
+    state char(3),
+    email char(20) NOT NULL,
+    PRIMARY KEY (ID)
+ );
+
+
+CREATE TABLE items (
+    item_no int,
+    description char(10) NOT NULL,
+    qty_p_stock int NOT NULL,
+    price decimal(5,2) NOT NULL CONSTRAINT price_CK CHECK (price >= 1 and price <= 500),
+    PRIMARY KEY (item_no)
+ );
+ 
+ CREATE TABLE transactions (
+    c_id int,
+    item_id int,
+    item_qty int NOT NULL CONSTRAINT item_qty_CK CHECK (item_qty > 0),
+    trans_date date NOT NULL ,
+    PRIMARY KEY (c_id, item_id),
+    FOREIGN KEY (c_id) references customers(id),
+    FOREIGN KEY (item_id) references items(item_no)
+ );
+
+%%%%%%%% Insert records on each table %%%%%%
+
+
+# insert attributes in the customers table:
+
+    Insert into customers  values(101, 'Sam', NULL, 'Okl', 'sam101@uark.edu');
+    
+    Insert into customers values(102, 'John', 'Rogers', 'Ark',  'john102@uark.edu');
+    
+    Insert into customers values(103, 'Robert', NULL, 'Ark',  'robert103@uark.edu');
+    
+    Insert into customers values(104, 'Amelia', 'Dallas', 'Tex',  'amelia104@uark.edu');
+    
+    Insert into customers values(105, 'Rayan', 'Farmington', 'Ark', 'rayan105@uark.edu');
+    
+    Insert into customers values(106, 'Avery', 'Lincoln', NULL, 'avery106@uark.edu');
+    
+    Insert into customers values(107, 'Bob', NULL, 'Ark', 'bob107@uark.edu');
+    
+    Insert into customers values(108, 'Jessy', 'Rogers', 'Ark', 'jessy108@uark.edu');
+
+    Insert into customers values(109, 'Ella', 'Branson', NULL, 'ella109@uark.edu');
+    
+    Insert into customers values(110, 'Harper', 'Westfork', 'Ark', 'harper110@uark.edu');
+    
+    Insert into customers values(111, 'Sophia', 'Lincoln', 'Ark', 'sophia111@uark.edu');
+    
+    Insert into customers values(112, 'Luna', 'Fayettevil', 'Ark', 'luna112@uark.edu');
+
+
+--add 15 records in items table
+
+Insert into items values(10, 'IpadSleeve', 120,  29.99);
+
+Insert into items values(11, 'GalSleeve', 200, 24.99);
+
+Insert into items values(12, 'KindSleeve', 60, 10.99);
+
+Insert into items values(13, 'SurfSleeve', 100,  29.99);
+
+Insert into items values(14, 'Galaxy16GB', 43,  223.23);
+
+Insert into items values(15, 'Galaxy32GB', 150,  390.99);
+
+Insert into items values(16, 'Galaxy64GB', 40, 499.99);
+
+Insert into items values(17, 'Ipad16GB', 123, 399.99);
+
+Insert into items values(18, 'Ipad32GB', 99, 499.99);
+
+Insert into items values(19, 'Kindle8GB', 121, 79.99);
+
+Insert into items values(20, 'Kindle16GB', 99,  123.23);
+
+Insert into items values(21, 'Kindle32GB', 75,  159.49);
+
+Insert into items values(22, 'MSSurf16GB', 49,  399.99);
+
+Insert into items values(23, 'MSSurf32GB', 40,  449.99);
+
+Insert into items values(24, 'MSSurf64GB', 29,  499.99);
+
+
+#add 18 records in transactions table
+#Insert into transactions VALUES
+
+Insert into transactions VALUES (107, 16, 1, '21-Jul-2021');
+
+Insert into transactions VALUES (106, 12, 2, '15-Jul-2021');
+
+Insert into transactions VALUES (107, 15, 1, '25-Jul-2021');
+
+Insert into transactions VALUES(105, 15, 1, '22-Aug-2021');
+
+Insert into transactions VALUES(103, 14, 2, '11-Sep-2021');
+
+Insert into transactions VALUES(106, 15, 1, '21-Jul-2021');
+
+Insert into transactions VALUES(104, 16, 1, '02-Aug-2021');
+
+Insert into transactions VALUES(108, 18, 3, '01-Aug-2021');
+
+Insert into transactions VALUES(103, 15, 1, '15-Jul-2021');
+
+Insert into transactions VALUES(102, 17, 2, '30-Jul-2021');
+
+Insert into transactions VALUES(102, 18, 1, '12-Aug-2021');
+
+Insert into transactions VALUES(104, 19, 1, '15-Aug-2021');
+
+Insert into transactions VALUES(104, 17, 2, '15-Aug-2021');
+
+Insert into transactions VALUES(104, 20, 1, '15-Aug-2021');
+
+Insert into transactions VALUES(102, 16, 1, '12-Aug-2021');
+
+Insert into transactions VALUES (104, 12, 1, '25-Jul-2021');
+
+Insert into transactions VALUES (103, 10, 1, '25-Jul-2021');
+
+#Insert into transactions VALUES (108, 24, 1, '01-Aug-2021');
+
+#Insert into transactions VALUES (108, 14, 1, '25-Jul-2021');
+
+Insert into transactions VALUES (108, 21, 1, TO_DATE(CURRENT_DATE - 1));
+
+Insert into transactions VALUES (103, 21, 1, TO_DATE(CURRENT_DATE));
+
+##update the records
+#UPDATE customers
+#SET city = 'Fortworth'
+#WHERE id = 108;
+
+UPDATE transactions
+    SET trans_date =  '14-Nov-2021'
+    Where c_id = 108 and item_id = 24;
+
+UPDATE transactions
+    SET trans_date =  TO_DATE(CURRENT_DATE - 5)
+    Where c_id = 108 and item_id = 14;
+
+
+/* To turn in your output, on SQL prompt, type: spool
+   MAKE file as asgn1
+*/
+
+spool LAMICHHANE-HW5
+/*1.  Show all tables you have created.  Use the command
+ */
+
+Select * from cat;
+
+/* 2. Show the schema of each table.  Use the command
+ desc tablename;
+ Replace the word "tablename" with actual name of each table.
+*/
+desc CUSTOMERS;
+
+desc ITEMS;
+
+desc TRANSACTIONS;
+
+
+/*To make the output of tasks 3, 4, and 5 look nicer, please set the following formats before executing those commands.  The formats should be set from sqlplus (i.e., after logging on to oracle).
+ */
+
+column owner format a12
+column table_name format a12
+column foreign_key format a12
+column primary_key format a12
+column referring_table format a15
+column search_condition format a45
+
+/*3. Show all primary keys.
+ To show the primary keys:
+*/
+
+select a.owner, a.table_name, column_name primary_key,
+a.constraint_name
+from   user_cons_columns a, user_constraints b
+where  a.constraint_name = b.constraint_name and
+constraint_type = 'P';
+
+/*4. Show all foreign key(s).
+To show the foreign keys:
+*/
+select a.owner, a.table_name, a.column_name foreign_key,
+       b.table_name Referring_table, b.column_name
+             Primary_key
+      from   user_cons_columns a, user_cons_columns b,
+             user_constraints c
+      where  a.constraint_name = c.constraint_name and
+             c.r_constraint_name = b.constraint_name;
+
+
+/*5. Show other constraints (if any) on each table.
+To show all other constraints:
+*/
+
+select owner, table_name, search_condition from user_constraints where search_condition is not null;
+
+/*6 print the all records from the created table
+*/
+
+SELECT * FROM table_name # replace table_name by the name of the table you want to print
+SELECT * FROM CUSTOMERS;
+SELECT * FROM items;
+SELECT * FROM transactions;
+
+/*
+Then execute the commands for tasks 1 through 6 to display the results on screen.  Finally, type:
+                        spool off
+Exit from sqlplus.  Upload your spool file via Blackboard.
+*/
+spool off
+
+#################### Assignment-1 ends here ###############
+
+
+#Exit from sqlplus.  Upload your spool file via Blackboard.
+# To drop a table
+
+/*
+ DROP TABLE table_name;
+/*
+
+/*
+UPDATE CUSTOMERS
+SET state = 'AR'
+WHERE id = 112;
+ */
+
+############### Some micscelleneous code #######################
+
+
+SELECT name, ID FROM customers where ID = C_ID FROM customers);
+
+SELECT name, ID FROM customers Where ID = ANY (SELECT C_ID, ITEM_ID From transactions Where ITEM_NO = any (SELECT max(cost) FROM test_items));
+
+#
+SELECT max(cost) FROM test_items;
+
+
+SELECT item_no From test_items Where cost = any (SELECT max(cost) FROM test_items);
+
+
+select C_ID from transactions where ITEM_ID =  any(SELECT item_no From test_items Where cost = any (SELECT max(cost) FROM test_items));
+
+
+################################## Assignment 2 ##################################
+spool asgn2
+/* Assignment 2
+ Question 1.
+    Find and print the total number of customers who are from Arkansas (i.e., state is listed as “AR”) but have no city information in the database.
+ 
+ SELECT COUNT(id) FROM customers WHERE state = 'AR' and city is NULL;
+*/
+
+SELECT COUNT(id) FROM (SELECT id from customers  WHERE state = 'AR' and city is NULL);
+
+/* Question No 2.
+   Print the names and IDs of customers who have purchased the most priced item(s).  Do not print duplicate records.
+ We do not need select distinct  here since all records are distinct by id in Customers table
+ */
+
+SELECT  name, ID FROM customers WHERE ID IN  (SELECT DISTINCT C_ID from transactions WHERE item_id IN   (SELECT item_no FROM items WHERE price IN  (SELECT max(price) FROM items)));
+
+
+/* Question No 3.
+  Print the description and qty_p_stock values of items that were never sold.
+*/
+
+SELECT description, qty_p_stock FROM items WHERE item_no NOT IN ( SELECT item_id FROM transactions);
+
+/* Question No 4. Sold at leat one time
+   Show the item number, description, and price of items that have been ever sold.  Do not print duplicate records.
+   We do not need select distinct  here since all items are distinct by item number in items table
+*/
+
+
+SELECT  item_no, description, price FROM items where item_no IN ( SELECT DISTINCT item_id FROM transactions);
+
+/*  Question No 5.
+    Print the date(s) when any item worth more than $400 was sold.  There should be no duplicate records in the output.
+    We need select distinct here because item_id is not a  primary key in the transaction tables
+*/
+
+SELECT DISTINCT trans_date FROM transactions WHERE ITEM_ID IN (SELECT  item_no FROM items WHERE price > 400 );
+
+spool off
+
+
+
+
+################# Assignment 3 goes below ###########
+
+/*Show the schema of each table.  Use the command
+ desc tablename;
+ Replace the word "tablename" with actual name of each table.
+*/
+
+desc CUSTOMERS;
+
+desc ITEMS;
+
+desc TRANSACTIONS;
+######
+CREATE TABLE student
+(
+stu_id varchar(10),
+stu_name varchar(20),
+branch varchar(20)
+);
+
+
+CREATE TABLE branch_details
+(
+branch_name varchar(10),
+subjects INT
+);
+
+CREATE TABLE credit_details
+(
+branch varchar(20),
+max_credits INT,
+mp_credits_required INT
+);
+
+INSERT INTO student VALUES
+('1901401','DEVA','C.S');
+INSERT INTO student VALUES
+('1901402','HARSH','C.S');
+
+INSERT INTO student VALUES
+('1901403','DAVID','E.C');
+
+
+INSERT INTO branch_details VALUES
+('C.S',8);
+INSERT INTO branch_details VALUES
+('E.C',7);
+
+INSERT INTO credit_details VALUES
+('C.S',24, 12);
+INSERT INTO credit_details VALUES
+('E.C',21, 11);
+
+SELECT * FROM student;
+SELECT * FROM branch_details;
+SELECT * FROM credit_details;
+
+SELECT * FROM student, branch_details, credit_details;
+
+#Query to display students who have enrolled in a course and their particulars.
+
+SELECT student.stu_id, student.stu_name,
+student.branch, subjects, max_credits
+FROM student, branch_details, credit_details
+WHERE student.branch = branch_details.branch_name AND
+branch_details.branch_name = credit_details.branch;
+
+#update the records
+UPDATE customers
+SET city = 'Fortworth'
+WHERE id = 108;
+
+select c_id, item_id, trans_date from transactions where trans_date  = any(select min(trans_date) from transactions);
+
+
+spool asgn3
+
+/*
+---------------------  ASSIGNMENT - 3   -----------------------------
+ Question No 1.
+    Find the earliest transaction made by any customer from the state of TX.  Print the customer’s name, item description, and transaction date.
+*/
+
+SELECT name
+    ,description
+    ,trans_date
+FROM (
+    SELECT customers.name
+        ,customers.STATE
+        ,items.description
+        ,transactions.trans_date
+    FROM customers
+        ,items
+        ,transactions
+    WHERE customers.id = transactions.c_id
+        AND items.item_no = transactions.item_id
+        AND transactions.trans_date = (
+            SELECT min(transactions.trans_date) AS mp_TX_date
+            FROM customers
+                ,transactions
+            WHERE customers.id = transactions.c_id
+                AND customers.STATE = 'TX'
+            )
+        AND customers.STATE = 'TX'
+    )
+;
+
+-- Alternatively Using Join Operation
+
+SELECT customers.name
+    ,items.description
+    ,transactions.trans_date
+FROM transactions
+INNER JOIN items ON items.item_no = transactions.item_id
+INNER JOIN customers ON customers.id = transactions.c_id
+WHERE customers.STATE = 'TX'
+    AND transactions.trans_date = (
+        SELECT min(transactions.trans_date)
+        FROM customers
+            ,transactions
+        WHERE customers.id = transactions.c_id
+            AND customers.STATE = 'TX'
+        )
+;
+
+/*  Question No 2.
+    For every customer who has ever purchased an item, print the customer's name, email ID, corresponding item description, and purchase date.  If a customer has made purchases multiple times, there should be a row for each of his/her transaction.
+ */
+
+SELECT name
+    ,email
+    ,description
+    ,trans_date
+FROM (
+    SELECT customers.name
+        ,customers.email
+        ,items.description
+        ,transactions.trans_date
+    FROM customers
+        ,items
+        ,transactions
+    WHERE customers.id = transactions.c_id
+        AND items.item_no = transactions.item_id
+    )
+;
+
+-- Alternatively Using JOIN Operation
+
+SELECT name
+    ,email
+    ,description
+    ,trans_date
+FROM customers
+INNER JOIN transactions ON customers.id = transactions.c_id
+INNER JOIN items ON items.item_no = transactions.item_id
+;
+
+/* Question No 3.
+    For every item, print the item_no, its description, and the number of times the item was sold (i.e., the number of transactions having that item).
+*/
+
+SELECT item_no
+    ,description
+    ,count(item_id) AS num_items_sold
+FROM transactions
+INNER JOIN items ON transactions.item_id = items.item_no
+GROUP BY item_no
+    ,description
+;
+
+/* Question No 4.
+    For every item worth more than $200, print the item_no, price, and the name(s) of customer(s) who have purchased the item.  The output must appear in descending order of price and must not have any duplicate records.
+ */
+
+SELECT item_no
+    ,price
+    ,name
+FROM customers
+    ,items
+    ,transactions
+WHERE customers.id = transactions.c_id
+    AND items.item_no = transactions.item_id
+    AND items.price > 200
+ORDER BY price DESC
+;
+
+-- Alternatively Using JOIN Operation
+
+SELECT item_no
+    ,price
+    ,name
+FROM customers
+INNER JOIN transactions ON customers.id = transactions.c_id
+INNER JOIN items ON items.item_no = transactions.item_id
+    AND items.price > 200
+ORDER BY price DESC
+;
+
+/*    Question No 5.
+    For every customer, find the number of times the customer has made a purchase.  The output should show the customer’s ID, name, and the purchase count. If a customer has never purchased anything, the customer’s ID and name should be there in the output; but the count value should be absent.
+ */
+
+SELECT id
+    ,name
+    ,count(c_id) AS purchase_count
+FROM customers
+INNER JOIN transactions ON customers.id = transactions.c_id
+GROUP BY name
+    ,id
+UNION
+SELECT id
+    ,name
+    ,c_id
+FROM customers
+LEFT JOIN transactions ON customers.id = transactions.c_id
+WHERE transactions.c_id IS NULL
+;
+
+spool off
+
+
+################# HOMEWORK - 4 ##############################
+#------------------------------------------------------------#
+1.  Count the number of transactions made during each month in 2020.  Then print the month (spelled out completely) and the total number of transactions made during that month.  That is, print "January" and total number of transactions in January, and so on.
+
+2.  Show the names of customers who have made purchases only on Sundays.
+
+3.  For any item that was not sold yesterday, print the item_no, description, and price.
+
+4.  Find the name of the customer who has made the maximum number of purchases within the last 10 days (not counting the day the query is being run).  Print his/her name and the string  "** Star Customer" next to the name.
+
+5.  Write a view named CUST_PURCHASES to calculate the total number of times a customer has made a purchase during the last month.  The output must show the ID and name of the customer and the number of times he/she has made the purchase.  If a customer did not make a purchase last month, your output should show the ID and name of the customer, and the word “Zero” next to the name (under the column that shows the number of purchases).
+
+Create the view before you create the spool file.  The view creation command should not appear in your output file.  Rather, do the followings to show the view definition.
+
+  Type the following 'SET' command only once after you log on to oracle.
+
+     SQL> Set Long n
+(replace n with an integer that is more than the maximum number of characters in the view definition)
+
+Then use the following 'SELECT' command to display the view definition.  The output of this command must appear in your spool file.
+
+   SQL> Select text from user_views where view_name = '????';
+
+   Replace ???? with the view name in upper case.  Make sure to use quotes around the view name.
+
+The spool file must show the queries for tasks 1 to 4, their output, the view definition and the records in the view.
+
+###########################################################################
+
+set pagesize 25
+Set Long 1000
+
+spool asgn4
+
+--##################  HOMEWORK - 4 ##############################
+------------------  SURYA LAMICHHANE ------------------------------
+
+/*
+1.  Count the number of transactions made during each month in 2020.  Then print the month (spelled out completely) and the total number of transactions made during that month.  That is, print "January" and total number of transactions in January, and so on.
+*/
+
+SELECT month
+    ,year
+    ,count(c_id) AS num_Trans
+FROM (
+    SELECT c_id
+        ,EXTRACT(year FROM trans_date) year
+        ,TO_CHAR(trans_date, 'Month') month
+    FROM transactions
+    )
+WHERE year = '2020'
+GROUP BY month, year;
+
+/*
+2.  Show the names of customers who have made purchases only on Sundays.
+*/
+--customers made transations on Sunday
+SELECT C.name
+    --,dt.day
+FROM customers C
+JOIN (
+    SELECT c_id
+    --,TO_CHAR(trans_date, 'fmday') day
+    FROM transactions
+    WHERE TO_CHAR(trans_date, 'fmday') = 'sunday' Minus
+    SELECT c_id
+    --,TO_CHAR(trans_date, 'fmday') day
+    FROM transactions
+    WHERE TO_CHAR(trans_date, 'fmday') != 'sunday'
+    ) dt ON C.id = dt.c_id
+;
+
+/*
+3.  For any item that was not sold yesterday, print the item_no, description, and price.
+*/
+ 
+SELECT item_no
+    ,description
+    ,price
+FROM items
+WHERE item_no NOT IN (
+        SELECT item_id
+        FROM transactions
+        WHERE trans_date = (
+                SELECT TO_DATE(CURRENT_DATE - 1)
+                FROM dual
+                )
+        );
+
+ /*
+4.  Find the name of the customer who has made the maximum number of purchases within the last 10 days (not counting the day the query is being run).  Print his/her name and the string  "** Star Customer" next to the name.
+*/
+SELECT CONCAT(name, '** Star Customer') as name
+FROM (
+SELECT name
+    ,count(id) as L10_Days
+FROM customers
+JOIN (
+    SELECT c_id
+    FROM transactions
+    WHERE trans_date BETWEEN (
+                    SELECT TO_DATE(CURRENT_DATE - 10)
+                    FROM dual
+                    )
+            AND (
+                    SELECT TO_DATE(CURRENT_DATE)
+                    FROM dual
+                    )
+    ) ten_days ON customers.id = ten_days.c_id
+GROUP BY customers.name
+ORDER BY L10_Days DESC
+) WHERE rownum = 1;
+
+/*
+5.  Write a view named CUST_PURCHASES to calculate the total number of times a customer has made a purchase during the last month.  The output must show the ID and name of the customer and the number of times he/she has made the purchase.  If a customer did not make a purchase last month, your output should show the ID and name of the customer, and the word “Zero” next to the name (under the column that shows the number of purchases).
+*/
+
+-- Show the view definition
+
+SELECT TEXT
+FROM user_views
+WHERE view_name = 'CUST_PURCHASES';
+
+
+-- Print the records from view = CUST_PURCHASES
+
+SELECT * FROM CUST_PURCHASES;
+
+spool off
+
+###################### HOMEWORK-4 ENDS HERE #######################
+----------------  AFTER THE FOLLOWING VIEW CTREATE CODE ----------
+ 
+CREATE VIEW CUST_PURCHASES
+AS
+SELECT name
+    ,id
+    ,CASE
+        WHEN count IS NULL
+            THEN 'Zero'
+        ELSE to_char(count)
+        END AS num_purchase
+FROM customers
+LEFT JOIN (
+    SELECT c_id
+        ,count(c_id) AS count
+    FROM transactions
+    WHERE EXTRACT(month FROM trans_date) = EXTRACT(month FROM sysdate) - 1
+        AND to_char(trans_date, 'yyyy') = to_char(sysdate, 'yyyy')
+    GROUP BY c_id
+    ) ON id = c_id;
+
+
+
+
+/*
+ Create the view before you create the spool file.  The view creation command should not appear in your output file.  Rather, do the followings to show the view definition.
+
+   Type the following 'SET' command only once after you log on to oracle.
+
+      SQL> Set Long n
+ (replace n with an integer that is more than the maximum number of characters in the view definition)
+
+ Then use the following 'SELECT' command to display the view definition.  The output of this command must appear in your spool file.
+
+    SQL> Select text from user_views where view_name = 'CUST_PURCHASES';
+
+    Replace ???? with the view name in upper case.  Make sure to use quotes around the view name.
+
+ The spool file must show the queries for tasks 1 to 4, their output, the view definition and the records in the view.
+ */
+
+########------- ASSIGNMENT 5 -----------###################
+
+You may refer to PL/SQL part of my oracle notes to complete this assignment.
+
+Write a PL/SQL procedure to perform the following tasks in order to add a record to the transactions table.
+
+1.  The procedure accepts c_id, item_id, and item_qty values from user.
+
+2.  Then it performs the following checks:
+    (a) The c_id must exist in customers table.
+    (b) The item_id must exist in items table (item_no).
+    (c) The qty_p_stock value for the corresponding item in items table must be equal to or greater than the item_qty value entered by the user.
+
+    If any of the above conditions fail, the procedure prints an appropriate message and quits.
+
+3.  If all of the above conditions are satisfied, the procedure determines the trans_date as the date when the procedure is being run (i.e., current date).
+
+4.  The procedure then inserts into the transactions table a record having the c_id, item_id, and item_qty values as supplied by the user in step 1, and the trans_date value as determined in step 3.  It also updates the items table to show the qty_p_stock value for the item after the purchase.  The procedure then prints a message indicating successful addition of the record and terminates.
+
+Save the procedure in a file named xxxx.sql, replacing 'xxxx' with your last name.
+
+Generate a spool file showing the procedure code (use the command 'get' followed by the procedure name on SQL prompt to show the code), output for each of the failed cases as mentioned in task 2, and  output of a successful record insertion into transactions table and modification of the items table (task 4). Name the spool file as xxxx.lst, replacing 'xxxx' with your last name.
+
+Submit the procedure file and the spool file via Blackboard.
+
+#########################################
+
+/*
+ Write a PL/SQL procedure to perform the following tasks in order to add a record to the transactions table.
+
+ 1.  The procedure accepts c_id, item_id, and item_qty values from user.
+
+ */
+SET serveroutput on;
+
+DECLARE
+c_id customers.id%type;
+item_id items.item_no%type;
+item_qty transactions.item_qty%type;
+trans_date transactions.trans_date%type;
+
+procedure enough_qty(
+    cur_stock int,
+    sale_qty in out int,
+    rem_qty int
+    ) IS
+    BEGIN
+    rem_qty := cur_stock - sale_qty;
+    END;
+
+BEGIN
+    SELECT id
+        , item_no
+        , qty_p_stock
+From into customers, items
+into
+update transactions;
+
+
+DECLARE qty_on_hand NUMBER (5);
+
+BEGIN
+    SELECT quantity
+    INTO qty_on_hand
+    FROM inventory
+    WHERE product = 'TENNIS RACKET'
+    FOR
+
+    UPDATE OF quantity;
+
+    IF qty_on_hand > 0 THEN -- check quantity
+        UPDATE inventory
+        SET quantity = quantity - 1
+        WHERE product = 'TENNIS RACKET';
+
+    INSERT INTO purchase_record
+    VALUES (
+        'Tennis racket purchased'
+        ,SYSDATE
+        );ELSE
+
+    INSERT INTO purchase_record
+    VALUES (
+        'Out of tennis rackets'
+        ,SYSDATE
+        );
+END
+
+IF ;
+    COMMIT;
+    END;
+
+
+####### Try a PL/SQL code  #######
+Declare
+    message varchar2(20) := 'Hello, World!';
+Begin
+    dbms_output.put_line(' HELLO ' || 12344 || ' WORLD! ');
+End;
+/
+
+#  output on setup
+set serveroutput on
+
+# in other way
+# using execute keyword
+
+create  or replace procedure greetings
+as
+Declare
+    message varchar2(20) := 'Hello, World!';
+Begin
+    dbms_output.put_line(message);
+End;
+/
+
+execute greetings;
+
+##########################
+
+CREATE TABLE acct_master (
+    acct_no number(5) PRIMARY KEY
+    ,acct_name varchar2(10)
+    ,balance number(10)
+    );
+# INSERTING data in acct_mstr
+insert into acct_master values(1, 'aaa', 1000);
+insert into acct_master values(2, 'bbb', 100);
+insert into acct_master values(3, 'ccc', 1100);
+insert into acct_master values(4, 'ddd', 700);
+insert into acct_master values(5, 'eee', 1700);
+
+
+#Note that all text in green colour are comments.
+
+#Below is the required implementation:
+
+--WARNING! ERRORS ENCOUNTERED DURING SQL PARSING!
+-- DECLARING VARIABLES
+DECLARE xacct_no number (5);
+
+-- here, minimum balance is set to 1000;
+xmp_bal number(5) : = 1000;
+
+xbalance number(5);
+
+BEGIN
+    -- taking input from user
+    xacct_no: = & xacct_no;
+
+    -- selecting balance of that user INTO "xbalance";
+    SELECT balance
+    INTO xbalance
+    FROM acct_master
+    WHERE acct_no = xacct_no;
+
+    -- if condition true, updating balance
+    -- with balance = balance - 100
+    IF (xbalance < xmp_bal) THEN --condition check
+        UPDATE acct_master
+        SET balance = balance - 100
+        WHERE acct_no = xacct_no;
+
+    -- remaining amount
+    xbalance: = xbalance - 100;
+
+    dbms_output.put_line('Rs 100 is deducted
+            and current balance is ' || xbalance);
+        -- if condition is false
+        ELSE
+
+    dbms_output.put_line('Current balance is ' || xbalance);
+        --ENDING IF
+END
+
+IF ;
+    -- ENDING OF BEGIN
+    END;/ -- FOR DISPLAYING OUTPUT IN SCREEN
+
+####### HOMEWORK - 5 
+
+/*
+ Write a PL/SQL procedure to perform the following tasks in order to add a record to the transactions table.
+
+ 1.  The procedure accepts c_id, item_id, and item_qty values from user.
+
+ */
+#2.  "-------------------------------------" log on to oracle using the following command:
+              rlwrap sqlplus dbclass53@\"localhost:49161/xe\"
+
+SET serveroutput ON;
+
+CREATE OR replace PROCEDURE transactions_insert(p_c_id customers.id%type, p_item_id items.item_no%type, p_item_qty transactions.item_qty%type) IS
+--# insert a new transaction
+BEGIN
+    INSERT INTO transactions (
+        c_id
+        ,item_id
+        ,item_qty
+        ,trans_date
+        )
+    VALUES (
+        p_c_id
+        ,p_item_id
+        ,p_item_qty
+        ,SYSDATE
+        );
+    --# update qty in stock in items table
+    UPDATE items
+    SET qty_in_stock = qty_in_stock - p_item_qty
+    WHERE item_no = p_item_id;
+    dbms_output.put_line('record inserted successfully ...!');
+END;/
+
+EXEC transactions_insert(110, 12, 2);
+
+
+
+####################
+
+ACCEPT p_c_id PROMPT "Enter Customer id_info ";
+ACCEPT p_item_id PROMPT "Enter item id_info ";
+ACCEPT p_item_qty PROMPT "Enter sale item qty";
+BEGIN
+    INSERT INTO transactions VALUES (&p_c_id, &p_item_id, &p_item_qty,to_date(SYSDATE));
+    COMMIT;
+END;
+
+DELETE
+FROM
+    transactions
+WHERE
+    trans_date = to_date(SYSDATE);
